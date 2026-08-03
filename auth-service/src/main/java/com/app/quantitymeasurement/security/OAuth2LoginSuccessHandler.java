@@ -46,8 +46,7 @@ public class OAuth2LoginSuccessHandler
                 
                 <script>
                 
-                window.location.href = "http://localhost:5173/oauth-success?token=%s";
-                
+                window.location.href = "https://maker-neglector-unpiloted.ngrok-free.dev/oauth-success?token=%s";
                 </script>
                 
                 </body>
