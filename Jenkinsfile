@@ -46,11 +46,11 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                sh '''
-                    docker build -t $AUTH_IMAGE ./auth-service
-                    docker build -t $QUANTITY_IMAGE ./quantity-service
-                    docker build -t $FRONTEND_IMAGE ./frontend
-                '''
+                sh """
+                    docker build -t ${AUTH_IMAGE} ./auth-service
+                    docker build -t ${QUANTITY_IMAGE} ./quantity-service
+                    docker build -t ${FRONTEND_IMAGE} ./frontend
+                """
             }
         }
 
@@ -63,38 +63,44 @@ pipeline {
                         passwordVariable: 'DOCKER_PASSWORD'
                     )
                 ]) {
-                    sh '''
-                        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                    sh """
+                        echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
 
-                        docker push $AUTH_IMAGE
-                        docker push $QUANTITY_IMAGE
-                        docker push $FRONTEND_IMAGE
+                        docker push ${AUTH_IMAGE}
+                        docker push ${QUANTITY_IMAGE}
+                        docker push ${FRONTEND_IMAGE}
 
                         docker logout
+                    """
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                withCredentials([
+                    string(credentialsId: 'GoogleclientID', variable: 'GOOGLE_CLIENT_ID'),
+                    string(credentialsId: 'googlesecretkey', variable: 'GOOGLE_CLIENT_SECRET')
+                ]) {
+                    sh '''
+                        cd /home/ubuntu/DEVOPS
+
+                        export GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+                        export GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
+
+                        docker compose down || true
+                        docker compose pull
+
+                        docker rm -f auth-service quantity-service quantity-frontend || true
+
+                        docker compose up -d
                     '''
                 }
             }
         }
 
-       stage('Deploy') {
-    steps {
-        withCredentials([
-            string(credentialsId: 'GoogleclientID', variable: 'GOOGLE_CLIENT_ID'),
-            string(credentialsId: 'googlesecretkey', variable: 'GOOGLE_CLIENT_SECRET')
-        ]) {
-            sh '''
-            cd /home/ubuntu/DEVOPS
-
-            export GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
-            export GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
-
-            docker compose down
-            docker compose pull
-            docker compose up -d
-            '''
-        }
     }
-}
+
     post {
         success {
             echo 'CI/CD Pipeline Executed Successfully!'
@@ -104,4 +110,4 @@ pipeline {
             echo 'Pipeline Failed!'
         }
     }
-}              
+}
