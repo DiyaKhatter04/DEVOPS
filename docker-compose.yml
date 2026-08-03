@@ -1,16 +1,17 @@
 services:
 
-  auth-service:
-    image: diyak644/auth-service:v2
-    container_name: auth-service
-    ports:
-      - "8081:8080"
+auth-service:
+  image: diyak644/auth-service:v2
+  container_name: auth-service
+  ports:
+    - "8081:8080"
 
-    environment:
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+  environment:
+    GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+    GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+    SERVER_FORWARD_HEADERS_STRATEGY: framework
 
-    restart: always
+  restart: always
 
   quantity-service:
     image: diyak644/quantity-service:v1
