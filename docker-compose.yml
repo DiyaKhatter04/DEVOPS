@@ -1,7 +1,7 @@
 services:
 
   auth-service:
-    image: diyak644/auth-service:v2
+    image: diyak644/auth-service:v3
     container_name: auth-service
     ports:
       - "8081:8080"
