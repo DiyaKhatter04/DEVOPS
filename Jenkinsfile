@@ -27,9 +27,13 @@ pipeline {
      stage('Docker Build') {
     steps {
 
-        sh 'docker build -t auth-service:v1 ./auth-service'
+        dir('auth-service') {
+            sh 'docker build -t auth-service:v1 .'
+        }
 
-        sh 'docker build -t quantity-service:v1 ./quantity-service'
+        dir('quantity-service') {
+            sh 'docker build -t quantity-service:v1 .'
+        }
 
     }
 }
