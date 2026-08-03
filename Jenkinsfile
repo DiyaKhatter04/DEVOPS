@@ -24,11 +24,15 @@ pipeline {
 
     }
 }
-        stage('Docker Build') {
-            steps {
-                sh 'docker build -t crud-app:v1 .'
-            }
-        }
+     stage('Docker Build') {
+    steps {
+
+        sh 'docker build -t auth-service:v1 ./auth-service'
+
+        sh 'docker build -t quantity-service:v1 ./quantity-service'
+
+    }
+}
 
     }
 }
