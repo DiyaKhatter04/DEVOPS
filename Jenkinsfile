@@ -34,17 +34,29 @@ pipeline {
         dir('quantity-service') {
             sh 'docker build -t quantity-service:v1 .'
         }
+	
+	dir('frontend') {
+            sh 'docker build -t quantity-frontend:v1 .'
+        }
 
     }
 }
 
 stage('Deploy') {
     steps {
-        sh '''
-        docker compose down
-        docker compose pull
-        docker compose up -d
-        '''
+        withCredentials([
+            string(credentialsId: 'GoogleclientID', variable: 'GOOGLE_CLIENT_ID'),
+            string(credentialsId: 'googlesecretkey', variable: 'GOOGLE_CLIENT_SECRET')
+        ]) {
+            sh '''
+                export GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+                export GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
+
+                docker compose down
+                docker compose pull
+                docker compose up -d
+            '''
+        }
     }
 }
 
