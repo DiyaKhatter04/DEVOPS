@@ -9,7 +9,7 @@ const TOKEN_KEY = "jwt";
 // "Log in" and "Sign up" in this app send the user through the same redirect;
 // that mirrors the backend exactly rather than inventing endpoints it doesn't have.
 function startGoogleLogin() {
-    window.location.href = "http://100.57.100.200:8081/oauth2/authorization/google";
+    window.location.href = "https://maker-neglector-unpiloted.ngrok-free.dev/oauth2/authorization/google";
 }
 
 function getToken() {
