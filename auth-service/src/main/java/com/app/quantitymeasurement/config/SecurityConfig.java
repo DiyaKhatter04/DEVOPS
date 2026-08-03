@@ -38,7 +38,7 @@ public class SecurityConfig {
                             new CorsConfiguration();
 
                     configuration.setAllowedOrigins(
-                            List.of("*")
+                            List.of("https://maker-neglector-unpiloted.ngrok-free.dev")
                     );
 
                     configuration.setAllowedMethods(
