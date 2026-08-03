@@ -36,20 +36,23 @@ public class OAuth2LoginSuccessHandler
 
         response.setContentType("text/html");
 
-        response.getWriter().write("""
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Login Successful</title>
-                </head>
-                <body>
-                
-                <script>
-                
-                window.location.href = "https://maker-neglector-unpiloted.ngrok-free.dev/oauth-success?token=%s";
-                </script>
-                
-                </body>
-                </html>
-                """.formatted(token));
+response.getWriter().write("""
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login Successful</title>
+</head>
+<body>
+
+<script>
+
+window.location.href =
+"https://maker-neglector-unpiloted.ngrok-free.dev/oauth-success?token=%s";
+
+</script>
+
+</body>
+</html>
+""".formatted(token));
+
     }}
