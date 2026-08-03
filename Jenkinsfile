@@ -76,25 +76,25 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                withCredentials([
-                    string(credentialsId: 'GoogleclientID', variable: 'GOOGLE_CLIENT_ID'),
-                    string(credentialsId: 'googlesecretkey', variable: 'GOOGLE_CLIENT_SECRET')
-                ]) {
-                    sh '''
-                        export GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
-                        export GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
+       stage('Deploy') {
+    steps {
+        withCredentials([
+            string(credentialsId: 'GoogleclientID', variable: 'GOOGLE_CLIENT_ID'),
+            string(credentialsId: 'googlesecretkey', variable: 'GOOGLE_CLIENT_SECRET')
+        ]) {
+            sh '''
+            cd /home/ubuntu/DEVOPS
 
-                        docker compose down || true
-                        docker compose pull
-                        docker compose up -d
-                    '''
-                }
-            }
+            export GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+            export GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
+
+            docker compose down
+            docker compose pull
+            docker compose up -d
+            '''
         }
     }
-
+}
     post {
         success {
             echo 'CI/CD Pipeline Executed Successfully!'
