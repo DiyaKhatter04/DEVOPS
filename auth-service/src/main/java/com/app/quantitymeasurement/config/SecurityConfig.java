@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.security.config.Customizer;
 
 import java.util.List;
 
@@ -80,25 +81,17 @@ public class SecurityConfig {
 
                         .authenticated()
                 )
-
-                .oauth2Login(oauth ->
-
-                        oauth
-
-                                .userInfoEndpoint(userInfo ->
-
-                                        userInfo.userService(
-                                                customOAuth2UserService
-                                        )
-                                )
-
-                                .successHandler(
-                                        successHandler
-                                )
+.oauth2Login(oauth ->
+        oauth
+                .authorizationEndpoint(endpoint ->
+                        endpoint.baseUri("/oauth2/authorization")
                 )
-
-                .httpBasic(httpBasic -> httpBasic.disable());
-
-        return http.build();
-    }
-}
+                .userInfoEndpoint(userInfo ->
+                        userInfo.userService(
+                                customOAuth2UserService
+                        )
+                )
+                .successHandler(
+                        successHandler
+                )
+)
