@@ -38,5 +38,15 @@ pipeline {
     }
 }
 
+stage('Deploy') {
+    steps {
+        sh '''
+        docker compose down
+        docker compose pull
+        docker compose up -d
+        '''
+    }
+}
+
     }
 }
